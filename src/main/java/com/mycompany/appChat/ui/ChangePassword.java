@@ -8,12 +8,12 @@ package com.mycompany.appChat.ui;
  *
  * @author Truong
  */
-public class Register extends javax.swing.JFrame {
+public class ChangePassword extends javax.swing.JFrame {
 
     /**
      * Creates new form Register
      */
-    public Register() {
+    public ChangePassword() {
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -28,39 +28,28 @@ public class Register extends javax.swing.JFrame {
     private void initComponents() {
 
         pnlRegister = new javax.swing.JPanel();
-        txtPassword = new javax.swing.JTextField();
-        lblUserName = new javax.swing.JLabel();
         lblPassword = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        txtNewPassword = new javax.swing.JPasswordField();
         btnSignup = new javax.swing.JButton();
         lblTitle = new javax.swing.JLabel();
         lblComfirmPassword = new javax.swing.JLabel();
-        txtComfirmPassword = new javax.swing.JPasswordField();
+        txtComPassword = new javax.swing.JPasswordField();
         btnSignup1 = new javax.swing.JButton();
+        lblOldPassword = new javax.swing.JLabel();
+        txtOldPassword = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("REGISTER NEW ACCOUNT");
 
         pnlRegister.setBackground(new java.awt.Color(255, 255, 102));
 
-        txtPassword.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        txtPassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPasswordActionPerformed(evt);
-            }
-        });
-
-        lblUserName.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        lblUserName.setForeground(new java.awt.Color(0, 0, 255));
-        lblUserName.setText("Username");
-
         lblPassword.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblPassword.setForeground(new java.awt.Color(0, 0, 255));
-        lblPassword.setText("Password");
+        lblPassword.setText("New password");
 
-        jPasswordField1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        txtNewPassword.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
 
-        btnSignup.setBackground(new java.awt.Color(255, 0, 51));
+        btnSignup.setBackground(new java.awt.Color(255, 0, 0));
         btnSignup.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnSignup.setForeground(new java.awt.Color(0, 0, 255));
         btnSignup.setText("CANCEL");
@@ -72,23 +61,29 @@ public class Register extends javax.swing.JFrame {
 
         lblTitle.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
         lblTitle.setForeground(new java.awt.Color(255, 0, 51));
-        lblTitle.setText("REGISTER NEW ACCOUNT");
+        lblTitle.setText("CHANGE PASSWORD");
 
         lblComfirmPassword.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblComfirmPassword.setForeground(new java.awt.Color(0, 0, 255));
         lblComfirmPassword.setText("Comfirm password");
 
-        txtComfirmPassword.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        txtComPassword.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
 
         btnSignup1.setBackground(new java.awt.Color(0, 255, 51));
         btnSignup1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnSignup1.setForeground(new java.awt.Color(0, 0, 255));
-        btnSignup1.setText("SIGN UP");
+        btnSignup1.setText("CHANGE");
         btnSignup1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSignup1ActionPerformed(evt);
             }
         });
+
+        lblOldPassword.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblOldPassword.setForeground(new java.awt.Color(0, 0, 255));
+        lblOldPassword.setText("Old password");
+
+        txtOldPassword.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
 
         javax.swing.GroupLayout pnlRegisterLayout = new javax.swing.GroupLayout(pnlRegister);
         pnlRegister.setLayout(pnlRegisterLayout);
@@ -97,41 +92,40 @@ public class Register extends javax.swing.JFrame {
             .addGroup(pnlRegisterLayout.createSequentialGroup()
                 .addGroup(pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlRegisterLayout.createSequentialGroup()
-                        .addGap(113, 113, 113)
-                        .addGroup(pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtPassword)
-                                .addComponent(jPasswordField1)
-                                .addComponent(txtComfirmPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
-                                .addComponent(lblComfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRegisterLayout.createSequentialGroup()
-                                    .addComponent(btnSignup)
-                                    .addGap(29, 29, 29)
-                                    .addComponent(btnSignup1)))
-                            .addComponent(lblUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(196, 196, 196)
+                        .addComponent(lblTitle))
                     .addGroup(pnlRegisterLayout.createSequentialGroup()
-                        .addGap(169, 169, 169)
-                        .addComponent(lblTitle)))
+                        .addGap(113, 113, 113)
+                        .addGroup(pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblOldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNewPassword)
+                            .addComponent(txtComPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
+                            .addComponent(lblComfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRegisterLayout.createSequentialGroup()
+                                .addComponent(btnSignup)
+                                .addGap(29, 29, 29)
+                                .addComponent(btnSignup1))
+                            .addComponent(txtOldPassword))))
                 .addContainerGap(131, Short.MAX_VALUE))
         );
         pnlRegisterLayout.setVerticalGroup(
             pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlRegisterLayout.createSequentialGroup()
-                .addGap(23, 23, 23)
+                .addContainerGap()
                 .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(lblOldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtOldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtNewPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lblComfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtComfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtComPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39)
                 .addGroup(pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSignup, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -149,15 +143,11 @@ public class Register extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlRegister, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlRegister, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPasswordActionPerformed
 
     private void btnSignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignupActionPerformed
         // TODO add your handling code here:
@@ -185,20 +175,21 @@ public class Register extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ChangePassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ChangePassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ChangePassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ChangePassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Register().setVisible(true);
+                new ChangePassword().setVisible(true);
             }
         });
     }
@@ -206,13 +197,13 @@ public class Register extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSignup;
     private javax.swing.JButton btnSignup1;
-    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JLabel lblComfirmPassword;
+    private javax.swing.JLabel lblOldPassword;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblTitle;
-    private javax.swing.JLabel lblUserName;
     private javax.swing.JPanel pnlRegister;
-    private javax.swing.JPasswordField txtComfirmPassword;
-    private javax.swing.JTextField txtPassword;
+    private javax.swing.JPasswordField txtComPassword;
+    private javax.swing.JPasswordField txtNewPassword;
+    private javax.swing.JPasswordField txtOldPassword;
     // End of variables declaration//GEN-END:variables
 }
