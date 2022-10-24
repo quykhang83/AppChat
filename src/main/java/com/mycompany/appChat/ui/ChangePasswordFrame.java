@@ -2,13 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.appChat.ui;
-import com.mycompany.appChat.dao.NguoiDungDao;
-import com.mycompany.appChat.model.NguoiDung;
+package com.mycompany.appchat.ui;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+import com.mycompany.appchat.dao.NguoiDungDao;
+import com.mycompany.appchat.model.NguoiDung;
 /**
  *
  * @author Duy

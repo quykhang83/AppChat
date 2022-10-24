@@ -2,16 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.appChat.dao;
+package com.mycompany.appchat.dao;
 
-import com.mycompany.appChat.helper.DB_Helper;
-import com.mycompany.appChat.model.BangChamCong;
-import com.mycompany.appChat.model.NhanVien;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.mycompany.appchat.helper.DB_Helper;
+import com.mycompany.appchat.model.BangChamCong;
+import com.mycompany.appchat.model.NhanVien;
 
 /**
  *
