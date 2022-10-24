@@ -4,8 +4,8 @@
  */
 package com.mycompany.appChat.ui;
 
-import com.mycompany.duyapp.helper.ShareData;
-import com.mycompany.duyapp.model.NguoiDung;
+import com.mycompany.appChat.helper.ShareData;
+import com.mycompany.appChat.model.NguoiDung;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
