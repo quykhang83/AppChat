@@ -32,11 +32,11 @@ public class Register extends javax.swing.JFrame {
         lblUserName = new javax.swing.JLabel();
         lblPassword = new javax.swing.JLabel();
         jPasswordField1 = new javax.swing.JPasswordField();
-        btnSignup = new javax.swing.JButton();
         lblTitle = new javax.swing.JLabel();
         lblComfirmPassword = new javax.swing.JLabel();
         txtComfirmPassword = new javax.swing.JPasswordField();
         btnSignup1 = new javax.swing.JButton();
+        lblLogi = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("REGISTER NEW ACCOUNT");
@@ -60,16 +60,6 @@ public class Register extends javax.swing.JFrame {
 
         jPasswordField1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
 
-        btnSignup.setBackground(new java.awt.Color(255, 0, 51));
-        btnSignup.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        btnSignup.setForeground(new java.awt.Color(0, 0, 255));
-        btnSignup.setText("CANCEL");
-        btnSignup.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSignupActionPerformed(evt);
-            }
-        });
-
         lblTitle.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
         lblTitle.setForeground(new java.awt.Color(255, 0, 51));
         lblTitle.setText("REGISTER NEW ACCOUNT");
@@ -90,6 +80,21 @@ public class Register extends javax.swing.JFrame {
             }
         });
 
+        lblLogi.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
+        lblLogi.setForeground(new java.awt.Color(0, 0, 255));
+        lblLogi.setText("You have an account?");
+        lblLogi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblLogiMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lblLogiMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                lblLogiMouseExited(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlRegisterLayout = new javax.swing.GroupLayout(pnlRegister);
         pnlRegister.setLayout(pnlRegisterLayout);
         pnlRegisterLayout.setHorizontalGroup(
@@ -106,8 +111,8 @@ public class Register extends javax.swing.JFrame {
                                 .addComponent(txtComfirmPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
                                 .addComponent(lblComfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRegisterLayout.createSequentialGroup()
-                                    .addComponent(btnSignup)
-                                    .addGap(29, 29, 29)
+                                    .addComponent(lblLogi, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
                                     .addComponent(btnSignup1)))
                             .addComponent(lblUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(pnlRegisterLayout.createSequentialGroup()
@@ -132,11 +137,11 @@ public class Register extends javax.swing.JFrame {
                 .addComponent(lblComfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtComfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
+                .addGap(36, 36, 36)
                 .addGroup(pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSignup, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSignup1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(45, Short.MAX_VALUE))
+                    .addComponent(btnSignup1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblLogi, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -159,14 +164,26 @@ public class Register extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPasswordActionPerformed
 
-    private void btnSignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignupActionPerformed
-        // TODO add your handling code here:
-        this.dispose();
-    }//GEN-LAST:event_btnSignupActionPerformed
-
     private void btnSignup1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignup1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSignup1ActionPerformed
+
+    private void lblLogiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLogiMouseClicked
+        // TODO add your handling code here:
+        this.dispose();
+        Login log = new Login();
+        log.setVisible(true);
+    }//GEN-LAST:event_lblLogiMouseClicked
+
+    private void lblLogiMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLogiMouseEntered
+        // TODO add your handling code here:
+        lblLogi.setForeground(new java.awt.Color(255, 0, 51));
+    }//GEN-LAST:event_lblLogiMouseEntered
+
+    private void lblLogiMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLogiMouseExited
+        // TODO add your handling code here:
+        lblLogi.setForeground(new java.awt.Color(0, 0, 255));
+    }//GEN-LAST:event_lblLogiMouseExited
 
     /**
      * @param args the command line arguments
@@ -204,10 +221,10 @@ public class Register extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnSignup;
     private javax.swing.JButton btnSignup1;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JLabel lblComfirmPassword;
+    private javax.swing.JLabel lblLogi;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblUserName;
