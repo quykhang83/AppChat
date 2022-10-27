@@ -4,6 +4,12 @@
  */
 package com.mycompany.appChat.ui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Truong
@@ -166,9 +172,37 @@ public class Login extends javax.swing.JFrame {
 
     private void btnSignup1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignup1ActionPerformed
         // TODO add your handling code here:
-        DashBoard db = new DashBoard();
-        db.setVisible(true);
-        this.dispose();
+        
+        String tk=txtusername1.getText().trim();
+        String pw=txtPass.getText();
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=sa;password=sa";
+            Connection conn = DriverManager.getConnection(Url);
+            String sql = "select * from ACCOUNT where Username='"+tk+"'" ;
+            PreparedStatement st = conn.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+        
+            if (rs.next()) { 
+               if(rs.getString(3).equals(pw))
+               { 
+                    DashBoard db = new DashBoard(tk);
+                    db.setVisible(true);
+                    this.dispose();
+               }else {
+                   JOptionPane.showMessageDialog(this, "Sai mật khẩu!","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
+               }
+            }else
+                JOptionPane.showMessageDialog(this, "Username khong ton tai!","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
+                  
+            rs.close();
+            st.close();
+            conn.close(); 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        
     }//GEN-LAST:event_btnSignup1ActionPerformed
 
     private void lblcreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblcreMouseClicked

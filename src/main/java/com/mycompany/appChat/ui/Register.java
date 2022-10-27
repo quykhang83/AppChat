@@ -4,6 +4,12 @@
  */
 package com.mycompany.appChat.ui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Truong
@@ -28,10 +34,10 @@ public class Register extends javax.swing.JFrame {
     private void initComponents() {
 
         pnlRegister = new javax.swing.JPanel();
-        txtPassword = new javax.swing.JTextField();
+        txtusername = new javax.swing.JTextField();
         lblUserName = new javax.swing.JLabel();
         lblPassword = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        txtpw = new javax.swing.JPasswordField();
         lblTitle = new javax.swing.JLabel();
         lblComfirmPassword = new javax.swing.JLabel();
         txtComfirmPassword = new javax.swing.JPasswordField();
@@ -43,10 +49,10 @@ public class Register extends javax.swing.JFrame {
 
         pnlRegister.setBackground(new java.awt.Color(255, 255, 102));
 
-        txtPassword.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        txtPassword.addActionListener(new java.awt.event.ActionListener() {
+        txtusername.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        txtusername.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPasswordActionPerformed(evt);
+                txtusernameActionPerformed(evt);
             }
         });
 
@@ -58,7 +64,7 @@ public class Register extends javax.swing.JFrame {
         lblPassword.setForeground(new java.awt.Color(0, 0, 255));
         lblPassword.setText("Password");
 
-        jPasswordField1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        txtpw.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
 
         lblTitle.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
         lblTitle.setForeground(new java.awt.Color(255, 0, 51));
@@ -106,8 +112,8 @@ public class Register extends javax.swing.JFrame {
                         .addGroup(pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtPassword)
-                                .addComponent(jPasswordField1)
+                                .addComponent(txtusername)
+                                .addComponent(txtpw)
                                 .addComponent(txtComfirmPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
                                 .addComponent(lblComfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRegisterLayout.createSequentialGroup()
@@ -128,11 +134,11 @@ public class Register extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtusername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtpw, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lblComfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -160,12 +166,78 @@ public class Register extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
+    private void txtusernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtusernameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtPasswordActionPerformed
+    }//GEN-LAST:event_txtusernameActionPerformed
 
     private void btnSignup1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignup1ActionPerformed
         // TODO add your handling code here:
+        String taikhoan,matkhau, matkhau2;
+        taikhoan = txtusername.getText().trim();
+        matkhau = txtpw.getText().trim();
+        matkhau2 = txtComfirmPassword.getText().trim();
+        
+        if (taikhoan.isEmpty()){
+            JOptionPane.showMessageDialog(this,"Tài khoản không được để trống","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
+            txtusername.requestFocus();
+        }else
+        if (matkhau.isEmpty()){
+            JOptionPane.showMessageDialog(this,"Mật khẩu không được để trống","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
+            txtpw.requestFocus();
+        }else
+        if (matkhau2.isEmpty()){
+            JOptionPane.showMessageDialog(this,"Nhac lai MK không được để trống","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
+            txtComfirmPassword.requestFocus();
+        } else
+        if (matkhau2.compareTo(matkhau)!=0){
+            JOptionPane.showMessageDialog(this,"Mat khau khong khop","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
+            txtComfirmPassword.requestFocus();
+        } else
+        
+        // 
+        try {
+                    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                    String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=sa;password=sa";
+                    Connection conn = DriverManager.getConnection(Url);
+                    String sql = "select max(ID) from ACCOUNT";
+                    int id = 0;
+                    PreparedStatement st = conn.prepareStatement(sql);
+                    ResultSet rs ;
+                    rs = st.executeQuery();
+                    if (rs.next()){
+                        id=rs.getInt(1)+1;
+                    }
+                    
+                    sql = "select USERNAME from ACCOUNT where username='"+taikhoan+"'";
+                    int check = 0;
+                    st = conn.prepareStatement(sql);
+                    rs = st.executeQuery();
+                    if (rs.next()){
+                        check=1;
+                    }
+                    if (check==1){
+            JOptionPane.showMessageDialog(this,"Tài khoản da ton tai","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
+            txtusername.requestFocus();
+            return;
+        }
+                    System.out.println(id);
+                    sql="INSERT INTO ACCOUNT VALUES(?,?,?,?)";
+                    st = conn.prepareStatement(sql);
+                    st.setInt(1, id);
+                    st.setString(2, taikhoan);
+                    st.setString(3, matkhau);
+                    st.setInt(4, 1);
+                    st.executeUpdate();
+                    System.out.println(taikhoan+" "+matkhau);
+                    JOptionPane.showMessageDialog(this,"Dang ki thanh cong, hay vao dang nhap!");
+                    txtusername.setText("");
+                    txtpw.setText("");
+                    txtComfirmPassword.setText("");
+                    st.close();
+                    conn.close();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this,"Username đã tồn tại, chon username khac","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
+                }
     }//GEN-LAST:event_btnSignup1ActionPerformed
 
     private void lblLogiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLogiMouseClicked
@@ -222,7 +294,6 @@ public class Register extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSignup1;
-    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JLabel lblComfirmPassword;
     private javax.swing.JLabel lblLogi;
     private javax.swing.JLabel lblPassword;
@@ -230,6 +301,7 @@ public class Register extends javax.swing.JFrame {
     private javax.swing.JLabel lblUserName;
     private javax.swing.JPanel pnlRegister;
     private javax.swing.JPasswordField txtComfirmPassword;
-    private javax.swing.JTextField txtPassword;
+    private javax.swing.JPasswordField txtpw;
+    private javax.swing.JTextField txtusername;
     // End of variables declaration//GEN-END:variables
 }
