@@ -4,6 +4,12 @@
  */
 package com.mycompany.appChat.ui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Truong
@@ -13,7 +19,14 @@ public class ChangePassword extends javax.swing.JFrame {
     /**
      * Creates new form Register
      */
+    String username;
     public ChangePassword() {
+        initComponents();
+        setLocationRelativeTo(null);
+    }
+    
+    public ChangePassword(String user) {
+        username = user;
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -156,6 +169,43 @@ public class ChangePassword extends javax.swing.JFrame {
 
     private void btnSignup1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignup1ActionPerformed
         // TODO add your handling code here:
+        String oldpw=txtOldPassword.getText().trim();
+        String pw=txtNewPassword.getText();
+        String pw2=txtComPassword.getText();
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=sa;password=sa";
+            Connection conn = DriverManager.getConnection(Url);
+            String sql = "select * from ACCOUNT where Username='"+username+"'" ;
+            PreparedStatement st = conn.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+        
+            if (rs.next()) { 
+               if(rs.getString(3).equals(oldpw))
+               { 
+                    if (pw.compareTo(pw2)!=0){
+                        JOptionPane.showMessageDialog(this,"Mat khau moi khong khop","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
+                        txtNewPassword.requestFocus();
+                    } else{
+                        //chang pw
+                        sql = " UPDATE ACCOUNT set password='"+pw+"' where USERNAME='"+username+"'";
+                        st = conn.prepareStatement(sql);
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(this, "Change password succeed!","THÔNG BÁO",JOptionPane.CLOSED_OPTION);
+                        this.dispose();
+                    
+                    }
+               }else {
+                   JOptionPane.showMessageDialog(this, "Mật khẩu cu khong dung!","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
+               }
+            }
+                  
+            rs.close();
+            st.close();
+            conn.close(); 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_btnSignup1ActionPerformed
 
     /**
