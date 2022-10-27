@@ -4,6 +4,13 @@
  */
 package com.mycompany.appChat.ui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Truong
@@ -15,13 +22,18 @@ public class DashBoard extends javax.swing.JFrame {
      */
     String username;
     public DashBoard() {
+        
         initComponents();
         setLocationRelativeTo(null);
+        
+        this.setVisible(true);
         
     }
     public DashBoard(String user) {
         username = user;
+        
         initComponents();
+        displayListAcc();
         setLocationRelativeTo(null);
         lblname.setText("Hello "+user);
         
@@ -44,12 +56,12 @@ public class DashBoard extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbChat = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         txtContent = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
+        lblChatWith = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -134,8 +146,17 @@ public class DashBoard extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 153));
         jLabel3.setText("Choose an account to chat");
 
-        jComboBox1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbChat.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        cmbChat.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbChatItemStateChanged(evt);
+            }
+        });
+        cmbChat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbChatActionPerformed(evt);
+            }
+        });
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -151,10 +172,10 @@ public class DashBoard extends javax.swing.JFrame {
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jButton3.setText("Send");
 
-        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(0, 0, 153));
-        jLabel5.setText("Chatting with Khang");
+        lblChatWith.setBackground(new java.awt.Color(255, 255, 255));
+        lblChatWith.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        lblChatWith.setForeground(new java.awt.Color(0, 0, 153));
+        lblChatWith.setText("Chatting with Khang");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -165,11 +186,11 @@ public class DashBoard extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblChatWith, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cmbChat, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(4, 4, 4)
                         .addComponent(txtContent, javax.swing.GroupLayout.PREFERRED_SIZE, 682, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -182,10 +203,10 @@ public class DashBoard extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jComboBox1)
+                    .addComponent(cmbChat)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lblChatWith, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -235,6 +256,15 @@ public class DashBoard extends javax.swing.JFrame {
         cp.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void cmbChatItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbChatItemStateChanged
+        // TODO add your handling code here:
+        lblChatWith.setText("Chatting with "+cmbChat.getSelectedItem());
+    }//GEN-LAST:event_cmbChatItemStateChanged
+
+    private void cmbChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbChatActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbChatActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -271,19 +301,39 @@ public class DashBoard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> cmbChat;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JLabel lblChatWith;
     private javax.swing.JLabel lblname;
     private javax.swing.JTextField txtContent;
     // End of variables declaration//GEN-END:variables
+
+    private void displayListAcc() {
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=sa;password=sa";
+            Connection conn = DriverManager.getConnection(Url);
+            String sql = "select USERNAME from ACCOUNT" ;
+            PreparedStatement st = conn.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+        
+            while (rs.next()) 
+               cmbChat.addItem(rs.getString(1));
+                  
+            rs.close();
+            st.close();
+            conn.close(); 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
