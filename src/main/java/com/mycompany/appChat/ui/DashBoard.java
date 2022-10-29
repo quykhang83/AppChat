@@ -4,12 +4,15 @@
  */
 package com.mycompany.appChat.ui;
 
+import java.awt.Color;
+import java.awt.Rectangle;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -36,6 +39,10 @@ public class DashBoard extends javax.swing.JFrame {
         displayListAcc();
         setLocationRelativeTo(null);
         lblname.setText("Hello "+user);
+        initTable();
+        renderToTableChat(tblModel);
+        
+        tblChat.setBackground(Color.WHITE);
         
     }
 
@@ -57,11 +64,11 @@ public class DashBoard extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         cmbChat = new javax.swing.JComboBox<>();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         txtContent = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         lblChatWith = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblChat = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -158,10 +165,6 @@ public class DashBoard extends javax.swing.JFrame {
             }
         });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
-
         txtContent.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtContent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,17 +174,65 @@ public class DashBoard extends javax.swing.JFrame {
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jButton3.setText("Send");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         lblChatWith.setBackground(new java.awt.Color(255, 255, 255));
         lblChatWith.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
         lblChatWith.setForeground(new java.awt.Color(0, 0, 153));
         lblChatWith.setText("Chatting with Khang");
 
+        tblChat.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tblChat.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "", ""
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblChat.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tblChat.setEnabled(false);
+        tblChat.setGridColor(new java.awt.Color(255, 255, 255));
+        tblChat.setRowHeight(26);
+        tblChat.setSelectionBackground(new java.awt.Color(255, 255, 255));
+        tblChat.setShowHorizontalLines(false);
+        tblChat.setShowVerticalLines(false);
+        jScrollPane2.setViewportView(tblChat);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -195,7 +246,10 @@ public class DashBoard extends javax.swing.JFrame {
                         .addGap(4, 4, 4)
                         .addComponent(txtContent, javax.swing.GroupLayout.PREFERRED_SIZE, 682, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)))
+                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane2)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -207,13 +261,13 @@ public class DashBoard extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblChatWith, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 512, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtContent, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 20, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -259,11 +313,23 @@ public class DashBoard extends javax.swing.JFrame {
     private void cmbChatItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbChatItemStateChanged
         // TODO add your handling code here:
         lblChatWith.setText("Chatting with "+cmbChat.getSelectedItem());
+        //displayContentChat(username, cmbChat.getSelectedItem());
     }//GEN-LAST:event_cmbChatItemStateChanged
 
     private void cmbChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbChatActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbChatActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        
+            tblModel.addRow(new Object[]{
+                    "5", "6"
+                })
+                   ;
+            int rowCount =  tblChat.getRowCount () - 1;
+            tblChat.changeSelection(rowCount, 1, rootPaneCheckingEnabled, rootPaneCheckingEnabled);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -310,10 +376,10 @@ public class DashBoard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblChatWith;
     private javax.swing.JLabel lblname;
+    private javax.swing.JTable tblChat;
     private javax.swing.JTextField txtContent;
     // End of variables declaration//GEN-END:variables
 
@@ -336,4 +402,47 @@ public class DashBoard extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
+
+    private void displayContentChat(String username, String selectedItem) {
+        
+        
+    }
+    
+    public void renderToTableChat(DefaultTableModel tblModel){
+        tblModel.setRowCount(0);
+        String pw="";
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=sa;password=sa";
+            Connection conn = DriverManager.getConnection(Url);
+            String sql = "select * from ACCOUNT" ;
+            PreparedStatement st = conn.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()){
+                Object[] row = new Object[]{
+                    rs.getString(2), rs.getString(3)
+                };
+            for(int i=1;i<100;i++) tblModel.addRow(row);
+            }
+           
+            rs.close();
+            st.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        tblModel.fireTableDataChanged();
+         int rowCount =  tblChat.getRowCount () - 1;
+         tblChat.changeSelection(rowCount, 1, rootPaneCheckingEnabled, rootPaneCheckingEnabled);
+    }
+    
+    private DefaultTableModel tblModel;
+    private void initTable(){
+        tblModel = new  DefaultTableModel();
+        tblModel.setColumnIdentifiers(new Object[]{"",""});
+        tblChat.setModel(tblModel);
+    }
+    
+    
+    
 }
