@@ -235,6 +235,9 @@ public class Register extends javax.swing.JFrame {
                     txtComfirmPassword.setText("");
                     st.close();
                     conn.close();
+                     this.dispose();
+                        Login log = new Login();
+                        log.setVisible(true);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(this,"Username đã tồn tại, chon username khac","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
                 }
