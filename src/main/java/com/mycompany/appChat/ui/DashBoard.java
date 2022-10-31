@@ -24,6 +24,7 @@ public class DashBoard extends javax.swing.JFrame {
      * Creates new form DashBoard
      */
     String username;
+    int idChannel = -1;
     public DashBoard() {
         
         initComponents();
@@ -41,7 +42,6 @@ public class DashBoard extends javax.swing.JFrame {
         lblname.setText("Hello "+user);
         initTable();
         renderToTableChat(tblModel);
-        
         tblChat.setBackground(Color.WHITE);
         
     }
@@ -169,6 +169,11 @@ public class DashBoard extends javax.swing.JFrame {
         txtContent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtContentActionPerformed(evt);
+            }
+        });
+        txtContent.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtContentKeyPressed(evt);
             }
         });
 
@@ -313,6 +318,9 @@ public class DashBoard extends javax.swing.JFrame {
     private void cmbChatItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbChatItemStateChanged
         // TODO add your handling code here:
         lblChatWith.setText("Chatting with "+cmbChat.getSelectedItem());
+        initTable();
+        renderToTableChat(tblModel);
+        tblChat.setBackground(Color.WHITE);
         //displayContentChat(username, cmbChat.getSelectedItem());
     }//GEN-LAST:event_cmbChatItemStateChanged
 
@@ -324,12 +332,96 @@ public class DashBoard extends javax.swing.JFrame {
         // TODO add your handling code here:
         
             tblModel.addRow(new Object[]{
-                    "5", "6"
+                    "", txtContent.getText()
                 })
                    ;
             int rowCount =  tblChat.getRowCount () - 1;
             tblChat.changeSelection(rowCount, 1, rootPaneCheckingEnabled, rootPaneCheckingEnabled);
+            
+            // them vao CSDL
+            try {
+                    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                    String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=sa;password=sa";
+                    Connection conn = DriverManager.getConnection(Url);
+                  
+                    
+                    int idN=0;
+                    String sqlid = "select count(id) from MESSAGE";
+                    PreparedStatement stid = conn.prepareStatement(sqlid);
+                    ResultSet rsid = stid.executeQuery();
+                    rsid = stid.executeQuery();
+                    if (rsid.next()){
+                        idN=rsid.getInt(1)+1;
+                        }
+                    
+                    String sql="INSERT INTO MESSAGE VALUES(?,?,?,?,?,?)";
+                    PreparedStatement st = conn.prepareStatement(sql);
+                    st.setInt(1, idN);
+                    st.setString(2, txtContent.getText());
+                    st.setString(3, "time ...... ");
+                    st.setInt(4, 1);
+                    st.setInt(5, idChannel);
+                    st.setString(6, cmbChat.getSelectedItem().toString());
+                    st.executeUpdate();
+                   
+                    st.close();
+                    conn.close();
+               
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this,"ERROR","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
+                }
+            txtContent.setText("");
+            txtContent.requestFocus();
+            
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void txtContentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContentKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode() == evt.VK_ENTER) {
+            tblModel.addRow(new Object[]{
+                    "", txtContent.getText()
+                })
+                   ;
+            
+            int rowCount =  tblChat.getRowCount () - 1;
+            tblChat.changeSelection(rowCount, 1, rootPaneCheckingEnabled, rootPaneCheckingEnabled);
+            
+            // them vao CSDL
+            try {
+                    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                    String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=sa;password=sa";
+                    Connection conn = DriverManager.getConnection(Url);
+                  
+                    
+                    int idN=0;
+                    String sqlid = "select count(id) from MESSAGE";
+                    PreparedStatement stid = conn.prepareStatement(sqlid);
+                    ResultSet rsid = stid.executeQuery();
+                    rsid = stid.executeQuery();
+                    if (rsid.next()){
+                        idN=rsid.getInt(1)+1;
+                        }
+                    
+                    String sql="INSERT INTO MESSAGE VALUES(?,?,?,?,?,?)";
+                    PreparedStatement st = conn.prepareStatement(sql);
+                    st.setInt(1, idN);
+                    st.setString(2, txtContent.getText());
+                    st.setString(3, "time ...... ");
+                    st.setInt(4, 1);
+                    st.setInt(5, idChannel);
+                    st.setString(6, cmbChat.getSelectedItem().toString());
+                    st.executeUpdate();
+                   
+                    st.close();
+                    conn.close();
+               
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this,"ERROR","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
+                }
+            txtContent.setText("");
+            txtContent.requestFocus();
+        }
+    }//GEN-LAST:event_txtContentKeyPressed
 
     /**
      * @param args the command line arguments
@@ -388,12 +480,13 @@ public class DashBoard extends javax.swing.JFrame {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=sa;password=sa";
             Connection conn = DriverManager.getConnection(Url);
-            String sql = "select USERNAME from ACCOUNT" ;
+            String sql = "select USERNAME from ACCOUNT";
             PreparedStatement st = conn.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
         
             while (rs.next()) 
-               cmbChat.addItem(rs.getString(1));
+               if(!rs.getString(1).equals(username))
+                   cmbChat.addItem(rs.getString(1));
                   
             rs.close();
             st.close();
@@ -403,10 +496,6 @@ public class DashBoard extends javax.swing.JFrame {
         }
     }
 
-    private void displayContentChat(String username, String selectedItem) {
-        
-        
-    }
     
     public void renderToTableChat(DefaultTableModel tblModel){
         tblModel.setRowCount(0);
@@ -415,14 +504,55 @@ public class DashBoard extends javax.swing.JFrame {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=sa;password=sa";
             Connection conn = DriverManager.getConnection(Url);
-            String sql = "select * from ACCOUNT" ;
+            //lay id channel
+            String sql = "select id from channel where (sender=? and title=?) or (sender=? and title=?)";
             PreparedStatement st = conn.prepareStatement(sql);
+            st.setString(1, username);
+            st.setString(2, cmbChat.getSelectedItem().toString());
+            st.setString(4, username);
+            st.setString(3, cmbChat.getSelectedItem().toString());
+           
             ResultSet rs = st.executeQuery();
+            
+            if (rs.next()) idChannel = rs.getInt(1);
+                else {
+                
+                int idN=0;
+                    String sqlid = "select count(id) from Channel";
+                    PreparedStatement stid = conn.prepareStatement(sqlid);
+                    ResultSet rsid = stid.executeQuery();
+                    rsid = stid.executeQuery();
+                    if (rsid.next()){
+                        idN=rsid.getInt(1)+1;
+                        }
+                
+                sql="INSERT INTO Channel VALUES(?,?,?,?,?)";
+                    st = conn.prepareStatement(sql);
+                    st.setInt(1, idN);
+                    st.setString(2, username);
+                    st.setString(4, "");
+                    st.setString(5, cmbChat.getSelectedItem().toString());
+                    st.setString(3, "time last ........ ");
+                    st.executeUpdate();
+                    idChannel = idN;
+            }
+            
+            // hien thi tn
+            sql ="select * from message where idChannel = " + idChannel;
+            st = conn.prepareStatement(sql);
+            rs = st.executeQuery();
+            
+            Object[] row;
             while (rs.next()){
-                Object[] row = new Object[]{
-                    rs.getString(2), rs.getString(3)
-                };
-            for(int i=1;i<100;i++) tblModel.addRow(row);
+                if(rs.getString(6).equals(username))
+                   tblModel.addRow(new Object[]{
+                    rs.getString(2), ""
+                });
+                else 
+                     tblModel.addRow(new Object[]{
+                    "", rs.getString(2)
+                });
+            
             }
            
             rs.close();
