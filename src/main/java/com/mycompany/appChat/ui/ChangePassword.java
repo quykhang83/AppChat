@@ -181,7 +181,7 @@ public class ChangePassword extends javax.swing.JFrame {
             ResultSet rs = st.executeQuery();
         
             if (rs.next()) { 
-               if(rs.getString(3).equals(oldpw))
+               if(rs.getString(2).equals(oldpw))
                { 
                     if (pw.compareTo(pw2)!=0){
                         JOptionPane.showMessageDialog(this,"Mat khau moi khong khop","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);

@@ -184,7 +184,7 @@ public class Login extends javax.swing.JFrame {
             ResultSet rs = st.executeQuery();
         
             if (rs.next()) { 
-               if(rs.getString(3).equals(pw))
+               if(rs.getString(2).equals(pw))
                { 
                     DashBoard db = new DashBoard(tk);
                     db.setVisible(true);

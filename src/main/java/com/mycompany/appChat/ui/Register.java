@@ -199,40 +199,16 @@ public class Register extends javax.swing.JFrame {
                     Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
                     String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=sa;password=sa";
                     Connection conn = DriverManager.getConnection(Url);
-                    String sql = "select max(ID) from ACCOUNT";
-                    int id = 0;
+                  
+                    String sql="INSERT INTO ACCOUNT VALUES(?,?,?)";
                     PreparedStatement st = conn.prepareStatement(sql);
-                    ResultSet rs ;
-                    rs = st.executeQuery();
-                    if (rs.next()){
-                        id=rs.getInt(1)+1;
-                    }
-                    
-                    sql = "select USERNAME from ACCOUNT where username='"+taikhoan+"'";
-                    int check = 0;
-                    st = conn.prepareStatement(sql);
-                    rs = st.executeQuery();
-                    if (rs.next()){
-                        check=1;
-                    }
-                    if (check==1){
-            JOptionPane.showMessageDialog(this,"Tài khoản da ton tai","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
-            txtusername.requestFocus();
-            return;
-        }
-                    System.out.println(id);
-                    sql="INSERT INTO ACCOUNT VALUES(?,?,?,?)";
-                    st = conn.prepareStatement(sql);
-                    st.setInt(1, id);
-                    st.setString(2, taikhoan);
-                    st.setString(3, matkhau);
-                    st.setInt(4, 1);
+                  
+                    st.setString(1, taikhoan);
+                    st.setString(2, matkhau);
+                    st.setInt(3, 1);
                     st.executeUpdate();
-                    System.out.println(taikhoan+" "+matkhau);
+                   
                     JOptionPane.showMessageDialog(this,"Dang ki thanh cong, hay vao dang nhap!");
-                    txtusername.setText("");
-                    txtpw.setText("");
-                    txtComfirmPassword.setText("");
                     st.close();
                     conn.close();
                      this.dispose();
