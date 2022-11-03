@@ -43,6 +43,7 @@ public class DashBoard extends javax.swing.JFrame {
         initTable();
         renderToTableChat(tblModel);
         tblChat.setBackground(Color.WHITE);
+        displayMyChat();
         
     }
 
@@ -61,6 +62,8 @@ public class DashBoard extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblMyChat = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         cmbChat = new javax.swing.JComboBox<>();
@@ -130,6 +133,34 @@ public class DashBoard extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 0, 153));
         jLabel2.setText("My chat");
 
+        tblMyChat.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
+        tblMyChat.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2"
+            }
+        ));
+        tblMyChat.setRowHeight(30);
+        tblMyChat.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblMyChatMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblMyChat);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -137,13 +168,19 @@ public class DashBoard extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(53, 53, 53)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(54, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 408, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(59, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(204, 255, 255));
@@ -252,9 +289,7 @@ public class DashBoard extends javax.swing.JFrame {
                         .addComponent(txtContent, javax.swing.GroupLayout.PREFERRED_SIZE, 682, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane2)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -321,6 +356,7 @@ public class DashBoard extends javax.swing.JFrame {
         initTable();
         renderToTableChat(tblModel);
         tblChat.setBackground(Color.WHITE);
+        
         //displayContentChat(username, cmbChat.getSelectedItem());
     }//GEN-LAST:event_cmbChatItemStateChanged
 
@@ -358,26 +394,36 @@ public class DashBoard extends javax.swing.JFrame {
                     PreparedStatement st = conn.prepareStatement(sql);
                     st.setInt(1, idN);
                     st.setString(2, txtContent.getText());
-                    st.setString(3, "time ...... ");
+                    //System.out.println(java.time.LocalDateTime.now().toString());
+                    String realtime = java.time.LocalDateTime.now().toString().substring(0, 19);
+                    st.setString(3, realtime);
                     st.setInt(4, 1);
                     st.setInt(5, idChannel);
                     st.setString(6, cmbChat.getSelectedItem().toString());
                     st.executeUpdate();
-                   
+                    
+                    //update lasttime my chat
+                    sql = "UPDATE channel set lastTime=? where id=?";
+                    st = conn.prepareStatement(sql);
+                    st.setString(1, realtime );
+                    st.setInt(2, idChannel);
+                    st.executeUpdate();
                     st.close();
                     conn.close();
                
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(this,"ERROR","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this,"chon nguoi de chat","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
                 }
             txtContent.setText("");
             txtContent.requestFocus();
+            displayMyChat();
             
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void txtContentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContentKeyPressed
         // TODO add your handling code here:
         if(evt.getKeyCode() == evt.VK_ENTER) {
+            
             tblModel.addRow(new Object[]{
                     "", txtContent.getText()
                 })
@@ -403,25 +449,47 @@ public class DashBoard extends javax.swing.JFrame {
                         }
                     
                     String sql="INSERT INTO MESSAGE VALUES(?,?,?,?,?,?)";
+                    String realtime = java.time.LocalDateTime.now().toString().substring(0, 19);
                     PreparedStatement st = conn.prepareStatement(sql);
                     st.setInt(1, idN);
                     st.setString(2, txtContent.getText());
-                    st.setString(3, "time ...... ");
+                    st.setString(3, realtime);
                     st.setInt(4, 1);
                     st.setInt(5, idChannel);
                     st.setString(6, cmbChat.getSelectedItem().toString());
                     st.executeUpdate();
                    
+                    //update lasttime my chat
+                    sql = "UPDATE channel set lastTime=? where id=?";
+                    st = conn.prepareStatement(sql);
+                    st.setString(1, realtime );
+                    st.setInt(2, idChannel);
+                    st.executeUpdate();
+                    
                     st.close();
                     conn.close();
                
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(this,"ERROR","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this,"chon nguoi de chat","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
                 }
             txtContent.setText("");
+            displayMyChat();
             txtContent.requestFocus();
         }
     }//GEN-LAST:event_txtContentKeyPressed
+
+    private void tblMyChatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMyChatMouseClicked
+        // TODO add your handling code here:
+        int row=tblMyChat.getSelectedRow();
+        System.out.println("row "+row);
+        
+        cmbChat.setSelectedItem(tblModel_mychat.getValueAt(row, 0).toString());
+        System.out.println(tblModel_mychat.getValueAt(row, 0));
+        lblChatWith.setText("Chatting with "+cmbChat.getSelectedItem());
+        initTable();
+        renderToTableChat(tblModel);
+        tblChat.setBackground(Color.WHITE);
+    }//GEN-LAST:event_tblMyChatMouseClicked
 
     /**
      * @param args the command line arguments
@@ -468,10 +536,12 @@ public class DashBoard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblChatWith;
     private javax.swing.JLabel lblname;
     private javax.swing.JTable tblChat;
+    private javax.swing.JTable tblMyChat;
     private javax.swing.JTextField txtContent;
     // End of variables declaration//GEN-END:variables
 
@@ -532,7 +602,7 @@ public class DashBoard extends javax.swing.JFrame {
                     st.setString(2, username);
                     st.setString(4, "");
                     st.setString(5, cmbChat.getSelectedItem().toString());
-                    st.setString(3, "time last ........ ");
+                    st.setString(3, java.time.LocalDateTime.now().toString().substring(0, 19));
                     st.executeUpdate();
                     idChannel = idN;
             }
@@ -566,12 +636,61 @@ public class DashBoard extends javax.swing.JFrame {
          tblChat.changeSelection(rowCount, 1, rootPaneCheckingEnabled, rootPaneCheckingEnabled);
     }
     
-    private DefaultTableModel tblModel;
+    private DefaultTableModel tblModel, tblModel_mychat;
     private void initTable(){
         tblModel = new  DefaultTableModel();
         tblModel.setColumnIdentifiers(new Object[]{"",""});
         tblChat.setModel(tblModel);
     }
+    
+     private void initTable_mychat(){
+        tblModel_mychat = new  DefaultTableModel();
+        tblModel_mychat.setColumnIdentifiers(new Object[]{"",""});
+        tblMyChat.setModel(tblModel_mychat);
+    }
+
+     
+public void renderToTableMyChat(DefaultTableModel tblModel){
+        tblModel.setRowCount(0);
+        
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=sa;password=sa";
+            Connection conn = DriverManager.getConnection(Url);
+      
+            // hien thi 
+            String sql ="select * from channel  JOIN (select distinct idchannel from message) as bang on (channel.id=idchannel) and ((sender=?) or (title=?))  order by lastTime DESC";
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setString(1, username);
+            st.setString(2, username);
+            ResultSet rs = st.executeQuery();
+            
+            Object[] row;
+            while (rs.next()){
+                if(rs.getString(5).equals(username))
+                   tblModel.addRow(new Object[]{
+                    rs.getString(2), rs.getString(3)
+                });
+                else 
+                     tblModel.addRow(new Object[]{
+                    rs.getString(5), rs.getString(3)
+                });
+            
+            }
+           
+            rs.close();
+            st.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        tblModel.fireTableDataChanged();
+    }     
+    private void displayMyChat() {
+        initTable_mychat();
+        renderToTableMyChat(tblModel_mychat);
+        
+        }
     
     
     
