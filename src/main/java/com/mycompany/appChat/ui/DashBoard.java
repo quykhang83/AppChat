@@ -608,7 +608,7 @@ public class DashBoard extends javax.swing.JFrame {
             }
             
             // hien thi tn
-            sql ="select * from message where idChannel = " + idChannel;
+            sql ="select * from message where idChannel = " + idChannel +" order by time";
             st = conn.prepareStatement(sql);
             rs = st.executeQuery();
             
