@@ -8,15 +8,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 /**
  *
- * @author Duy
+ * @author quykhang
  */
 public class DB_Helper {
-    public static Connection openConnection() throws Exception {
-        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        String DB_URL = "jdbc:sqlserver://localhost:1433;database=Duyapp;";
-        String USER_NAME = "sa";
-        String PASSWORD = "123456";
-        Connection conn = DriverManager.getConnection(DB_URL, USER_NAME, PASSWORD);
-        return conn;
+    public static Connection openConnection() throws Exception{
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");  
+        String connectionUrl = "jdbc:sqlserver://localhost;database=App_Chat;";
+        String username = "demo";
+        String password = "demo";
+        Connection con = DriverManager.getConnection(connectionUrl, username, password);
+        return con;
     }
 }

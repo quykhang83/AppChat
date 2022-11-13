@@ -4,19 +4,33 @@
  */
 package com.mycompany.appChat.ui;
 
+import com.mycompany.appChat.dao.ChannelDAO;
+import com.mycompany.appChat.dao.MessageDAO;
+import com.mycompany.appChat.helper.ImageHelper;
+import com.mycompany.appChat.model.Message;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 /**
  *
- * @author Truong
+ * @author quykhang
  */
 public class DashBoard extends javax.swing.JFrame {
 
@@ -25,26 +39,29 @@ public class DashBoard extends javax.swing.JFrame {
      */
     String username;
     int idChannel = -1;
+    private byte[] imageOS;
+
     public DashBoard() {
-        
+
         initComponents();
         setLocationRelativeTo(null);
-        
+
         this.setVisible(true);
-        
+
     }
+
     public DashBoard(String user) {
         username = user;
-        
+
         initComponents();
         displayListAcc();
         setLocationRelativeTo(null);
-        lblname.setText("Hello "+user);
+        lblname.setText("Hello " + user);
         initTable();
         renderToTableChat(tblModel);
         tblChat.setBackground(Color.WHITE);
         displayMyChat();
-        
+
     }
 
     /**
@@ -68,10 +85,11 @@ public class DashBoard extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         cmbChat = new javax.swing.JComboBox<>();
         txtContent = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        btnSend = new javax.swing.JButton();
         lblChatWith = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblChat = new javax.swing.JTable();
+        btnSendImg = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -214,11 +232,11 @@ public class DashBoard extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jButton3.setText("Send");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnSend.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnSend.setText("Send");
+        btnSend.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnSendActionPerformed(evt);
             }
         });
 
@@ -271,6 +289,14 @@ public class DashBoard extends javax.swing.JFrame {
         tblChat.setShowVerticalLines(false);
         jScrollPane2.setViewportView(tblChat);
 
+        btnSendImg.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnSendImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/duyapp/icons/Save-icon-48.png"))); // NOI18N
+        btnSendImg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSendImgActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -280,15 +306,17 @@ public class DashBoard extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(lblChatWith, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cmbChat, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(4, 4, 4)
-                        .addComponent(txtContent, javax.swing.GroupLayout.PREFERRED_SIZE, 682, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtContent)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
+                        .addComponent(btnSendImg, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSend, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
@@ -306,7 +334,8 @@ public class DashBoard extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtContent, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSendImg, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSend, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
@@ -352,11 +381,11 @@ public class DashBoard extends javax.swing.JFrame {
 
     private void cmbChatItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbChatItemStateChanged
         // TODO add your handling code here:
-        lblChatWith.setText("Chatting with "+cmbChat.getSelectedItem());
+        lblChatWith.setText("Chatting with " + cmbChat.getSelectedItem());
         initTable();
         renderToTableChat(tblModel);
         tblChat.setBackground(Color.WHITE);
-        
+
         //displayContentChat(username, cmbChat.getSelectedItem());
     }//GEN-LAST:event_cmbChatItemStateChanged
 
@@ -364,114 +393,65 @@ public class DashBoard extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbChatActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendActionPerformed
         // TODO add your handling code here:
-        
-            tblModel.addRow(new Object[]{
-                    "", txtContent.getText()
-                })
-                   ;
-            int rowCount =  tblChat.getRowCount () - 1;
-            tblChat.changeSelection(rowCount, 1, rootPaneCheckingEnabled, rootPaneCheckingEnabled);
-            
-            // them vao CSDL
-            try {
-                    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                    String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=sa;password=sa";
-                    Connection conn = DriverManager.getConnection(Url);
-                  
-                    
-                    int idN=0;
-                    String sqlid = "select count(id) from MESSAGE";
-                    PreparedStatement stid = conn.prepareStatement(sqlid);
-                    ResultSet rsid = stid.executeQuery();
-                    rsid = stid.executeQuery();
-                    if (rsid.next()){
-                        idN=rsid.getInt(1)+1;
-                        }
-                    
-                    String sql="INSERT INTO MESSAGE VALUES(?,?,?,?,?,?)";
-                    PreparedStatement st = conn.prepareStatement(sql);
-                    st.setInt(1, idN);
-                    st.setString(2, txtContent.getText());
-                    //System.out.println(java.time.LocalDateTime.now().toString());
-                    String realtime = java.time.LocalDateTime.now().toString().substring(0, 19);
-                    st.setString(3, realtime);
-                    st.setInt(4, 1);
-                    st.setInt(5, idChannel);
-                    st.setString(6, cmbChat.getSelectedItem().toString());
-                    st.executeUpdate();
-                    
-                    //update lasttime my chat
-                    sql = "UPDATE channel set lastTime=? where id=?";
-                    st = conn.prepareStatement(sql);
-                    st.setString(1, realtime );
-                    st.setInt(2, idChannel);
-                    st.executeUpdate();
-                    st.close();
-                    conn.close();
-               
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(this,"chon nguoi de chat","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
-                }
-            txtContent.setText("");
-            txtContent.requestFocus();
-            displayMyChat();
-            
-    }//GEN-LAST:event_jButton3ActionPerformed
+
+        tblModel.addRow(new Object[]{
+            "", txtContent.getText()
+        });
+        int rowCount = tblChat.getRowCount() - 1;
+        tblChat.changeSelection(rowCount, 1, rootPaneCheckingEnabled, rootPaneCheckingEnabled);
+
+        // them vao CSDL
+        try {
+            MessageDAO md = new MessageDAO();
+
+            int idN = md.getIDNewMessage();
+            String realtime = java.time.LocalDateTime.now().toString().substring(0, 19);
+
+            Message mess = new Message(idN, idChannel, 1, txtContent.getText(),
+                    realtime, cmbChat.getSelectedItem().toString());
+
+            md.insertTextMessage(mess);
+            md.updateLastChannelTime(mess);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "chon nguoi de chat", "CẢNH BÁO", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        txtContent.setText("");
+        txtContent.requestFocus();
+        displayMyChat();
+
+    }//GEN-LAST:event_btnSendActionPerformed
 
     private void txtContentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContentKeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyCode() == evt.VK_ENTER) {
-            
+        if (evt.getKeyCode() == evt.VK_ENTER) {
+
             tblModel.addRow(new Object[]{
-                    "", txtContent.getText()
-                })
-                   ;
-            
-            int rowCount =  tblChat.getRowCount () - 1;
+                "", txtContent.getText()
+            });
+
+            int rowCount = tblChat.getRowCount() - 1;
             tblChat.changeSelection(rowCount, 1, rootPaneCheckingEnabled, rootPaneCheckingEnabled);
-            
+
             // them vao CSDL
             try {
-                    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                    String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=sa;password=sa";
-                    Connection conn = DriverManager.getConnection(Url);
-                  
-                    
-                    int idN=0;
-                    String sqlid = "select count(id) from MESSAGE";
-                    PreparedStatement stid = conn.prepareStatement(sqlid);
-                    ResultSet rsid = stid.executeQuery();
-                    rsid = stid.executeQuery();
-                    if (rsid.next()){
-                        idN=rsid.getInt(1)+1;
-                        }
-                    
-                    String sql="INSERT INTO MESSAGE VALUES(?,?,?,?,?,?)";
-                    String realtime = java.time.LocalDateTime.now().toString().substring(0, 19);
-                    PreparedStatement st = conn.prepareStatement(sql);
-                    st.setInt(1, idN);
-                    st.setString(2, txtContent.getText());
-                    st.setString(3, realtime);
-                    st.setInt(4, 1);
-                    st.setInt(5, idChannel);
-                    st.setString(6, cmbChat.getSelectedItem().toString());
-                    st.executeUpdate();
-                   
-                    //update lasttime my chat
-                    sql = "UPDATE channel set lastTime=? where id=?";
-                    st = conn.prepareStatement(sql);
-                    st.setString(1, realtime );
-                    st.setInt(2, idChannel);
-                    st.executeUpdate();
-                    
-                    st.close();
-                    conn.close();
-               
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(this,"chon nguoi de chat","CẢNH BÁO",JOptionPane.ERROR_MESSAGE);
-                }
+                MessageDAO md = new MessageDAO();
+
+                int idN = md.getIDNewMessage();
+                String realtime = java.time.LocalDateTime.now().toString().substring(0, 19);
+
+                Message mess = new Message(idN, idChannel, 1, txtContent.getText(),
+                        realtime, cmbChat.getSelectedItem().toString());
+
+                md.insertTextMessage(mess);
+                md.updateLastChannelTime(mess);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "chon nguoi de chat", "CẢNH BÁO", JOptionPane.ERROR_MESSAGE);
+            }
             txtContent.setText("");
             displayMyChat();
             txtContent.requestFocus();
@@ -480,16 +460,62 @@ public class DashBoard extends javax.swing.JFrame {
 
     private void tblMyChatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMyChatMouseClicked
         // TODO add your handling code here:
-        int row=tblMyChat.getSelectedRow();
-        System.out.println("row "+row);
-        
+        int row = tblMyChat.getSelectedRow();
+        System.out.println("row " + row);
+
         cmbChat.setSelectedItem(tblModel_mychat.getValueAt(row, 0).toString());
         System.out.println(tblModel_mychat.getValueAt(row, 0));
-        lblChatWith.setText("Chatting with "+cmbChat.getSelectedItem());
+        lblChatWith.setText("Chatting with " + cmbChat.getSelectedItem());
         initTable();
         renderToTableChat(tblModel);
         tblChat.setBackground(Color.WHITE);
     }//GEN-LAST:event_tblMyChatMouseClicked
+
+    private void btnSendImgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendImgActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                if (f.isDirectory()) {
+                    return true;
+                } else {
+                    return f.getName().toLowerCase().endsWith(".png");
+                }
+            }
+
+            @Override
+            public String getDescription() {
+                return "Image File (*.png)";
+            }
+        });
+        if (chooser.showOpenDialog(this) == JFileChooser.CANCEL_OPTION) {
+            return;
+        }
+        File file = chooser.getSelectedFile();
+        try {
+            MessageDAO md = new MessageDAO();
+
+            int idN = md.getIDNewMessage();
+            String realtime = java.time.LocalDateTime.now().toString().substring(0, 19);
+
+            Message mess = new Message(idN, idChannel, 2, file.getPath(),
+                    realtime, cmbChat.getSelectedItem().toString());
+
+            md.insertTextMessage(mess);
+            md.updateLastChannelTime(mess);
+
+//            ImageIcon icon = new ImageIcon((String) mess.getContent());
+//            Image img = ImageHelper.resize(icon.getImage(), 180, 200);
+//            ImageIcon resizedIcon = new ImageIcon(img);
+//            lblAvt.setIcon(resizedIcon);
+//            imageOS = ImageHelper.toByteArray(img, "png");
+            txtContent.setText("");
+            displayMyChat();
+            txtContent.requestFocus();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnSendImgActionPerformed
 
     /**
      * @param args the command line arguments
@@ -527,10 +553,11 @@ public class DashBoard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSend;
+    private javax.swing.JButton btnSendImg;
     private javax.swing.JComboBox<String> cmbChat;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
@@ -548,136 +575,88 @@ public class DashBoard extends javax.swing.JFrame {
     private void displayListAcc() {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=sa;password=sa";
+            String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=demo;password=demo";
             Connection conn = DriverManager.getConnection(Url);
             String sql = "select USERNAME from ACCOUNT";
             PreparedStatement st = conn.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
-        
-            while (rs.next()) 
-               if(!rs.getString(1).equals(username))
-                   cmbChat.addItem(rs.getString(1));
-                  
-            rs.close();
-            st.close();
-            conn.close(); 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
-    
-    public void renderToTableChat(DefaultTableModel tblModel){
-        tblModel.setRowCount(0);
-        String pw="";
-        try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=sa;password=sa";
-            Connection conn = DriverManager.getConnection(Url);
-            //lay id channel
-            String sql = "select id from channel where (sender=? and title=?) or (sender=? and title=?)";
-            PreparedStatement st = conn.prepareStatement(sql);
-            st.setString(1, username);
-            st.setString(2, cmbChat.getSelectedItem().toString());
-            st.setString(4, username);
-            st.setString(3, cmbChat.getSelectedItem().toString());
-           
-            ResultSet rs = st.executeQuery();
-            
-            if (rs.next()) idChannel = rs.getInt(1);
-                else {
-                
-                int idN=0;
-                    String sqlid = "select count(id) from Channel";
-                    PreparedStatement stid = conn.prepareStatement(sqlid);
-                    ResultSet rsid = stid.executeQuery();
-                    rsid = stid.executeQuery();
-                    if (rsid.next()){
-                        idN=rsid.getInt(1)+1;
-                        }
-                
-                sql="INSERT INTO Channel VALUES(?,?,?,?,?)";
-                    st = conn.prepareStatement(sql);
-                    st.setInt(1, idN);
-                    st.setString(2, username);
-                    st.setString(4, "");
-                    st.setString(5, cmbChat.getSelectedItem().toString());
-                    st.setString(3, java.time.LocalDateTime.now().toString().substring(0, 19));
-                    st.executeUpdate();
-                    idChannel = idN;
+            while (rs.next()) {
+                if (!rs.getString(1).equals(username)) {
+                    cmbChat.addItem(rs.getString(1));
+                }
             }
-            
-            // hien thi tn
-            sql ="select * from message where idChannel = " + idChannel +" order by time";
-            st = conn.prepareStatement(sql);
-            rs = st.executeQuery();
-            
-            Object[] row;
-            while (rs.next()){
-                if(rs.getString(6).equals(username))
-                   tblModel.addRow(new Object[]{
-                    rs.getString(2), ""
-                });
-                else 
-                     tblModel.addRow(new Object[]{
-                    "", rs.getString(2)
-                });
-            
-            }
-           
+
             rs.close();
             st.close();
             conn.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        tblModel.fireTableDataChanged();
-         int rowCount =  tblChat.getRowCount () - 1;
-         tblChat.changeSelection(rowCount, 1, rootPaneCheckingEnabled, rootPaneCheckingEnabled);
     }
-    
+
+    public void renderToTableChat(DefaultTableModel tblModel) {
+        tblModel.setRowCount(0);
+        try {
+            ChannelDAO cd = new ChannelDAO();
+            idChannel = cd.getIDChannel(username, cmbChat.getSelectedItem().toString());
+
+            if (cd.displayTextMessage(idChannel, tblModel, username, tblChat)==2) {
+//                tblChat.getColumnModel().getColumn(0).setCellRenderer(new ImageRender());
+//                tblChat.getColumnModel().getColumn(1).setCellRenderer(new ImageRender());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        tblModel.fireTableDataChanged();
+        int rowCount = tblChat.getRowCount() - 1;
+        tblChat.changeSelection(rowCount, 1, rootPaneCheckingEnabled, rootPaneCheckingEnabled);
+    }
+
     private DefaultTableModel tblModel, tblModel_mychat;
-    private void initTable(){
-        tblModel = new  DefaultTableModel();
-        tblModel.setColumnIdentifiers(new Object[]{"",""});
+
+    private void initTable() {
+        tblModel = new DefaultTableModel();
+        tblModel.setColumnIdentifiers(new Object[]{"", ""});
         tblChat.setModel(tblModel);
     }
-    
-     private void initTable_mychat(){
-        tblModel_mychat = new  DefaultTableModel();
-        tblModel_mychat.setColumnIdentifiers(new Object[]{"",""});
+
+    private void initTable_mychat() {
+        tblModel_mychat = new DefaultTableModel();
+        tblModel_mychat.setColumnIdentifiers(new Object[]{"", ""});
         tblMyChat.setModel(tblModel_mychat);
     }
 
-     
-public void renderToTableMyChat(DefaultTableModel tblModel){
+    public void renderToTableMyChat(DefaultTableModel tblModel) {
         tblModel.setRowCount(0);
-        
+
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=sa;password=sa";
+            String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=demo;password=demo";
             Connection conn = DriverManager.getConnection(Url);
-      
+
             // hien thi 
-            String sql ="select * from channel  JOIN (select distinct idchannel from message) as bang on (channel.id=idchannel) and ((sender=?) or (title=?))  order by lastTime DESC";
+            String sql = "select * from channel  JOIN (select distinct idchannel from message) as bang on (channel.id=idchannel) and ((sender=?) or (title=?))  order by lastTime DESC";
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, username);
             st.setString(2, username);
             ResultSet rs = st.executeQuery();
-            
+
             Object[] row;
-            while (rs.next()){
-                if(rs.getString(5).equals(username))
-                   tblModel.addRow(new Object[]{
-                    rs.getString(2), rs.getString(3)
-                });
-                else 
-                     tblModel.addRow(new Object[]{
-                    rs.getString(5), rs.getString(3)
-                });
-            
+            while (rs.next()) {
+                if (rs.getString(5).equals(username)) {
+                    System.out.println(username);
+                    tblModel.addRow(new Object[]{
+                        rs.getString(2), rs.getString(3)
+                    });
+                } else {
+                    tblModel.addRow(new Object[]{
+                        rs.getString(5), rs.getString(3)
+                    });
+                }
+
             }
-           
+
             rs.close();
             st.close();
             conn.close();
@@ -685,13 +664,23 @@ public void renderToTableMyChat(DefaultTableModel tblModel){
             e.printStackTrace();
         }
         tblModel.fireTableDataChanged();
-    }     
+    }
+
     private void displayMyChat() {
         initTable_mychat();
         renderToTableMyChat(tblModel_mychat);
-        
+
+    }
+
+    private class ImageRender extends DefaultTableCellRenderer {
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            String photoName = value.toString();
+            ImageIcon imgIcon = new ImageIcon(new ImageIcon(photoName)
+                    .getImage().getScaledInstance(70, 70, Image.SCALE_DEFAULT));
+            return new JLabel(imgIcon);
         }
-    
-    
-    
+    }
+
 }

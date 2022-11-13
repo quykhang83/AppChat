@@ -197,7 +197,7 @@ public class Register extends javax.swing.JFrame {
         // 
         try {
                     Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                    String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=sa;password=sa";
+                    String Url = "jdbc:sqlserver://localhost:1433;databaseName=App_Chat;user=demo;password=demo";
                     Connection conn = DriverManager.getConnection(Url);
                   
                     String sql="INSERT INTO ACCOUNT VALUES(?,?,?)";
